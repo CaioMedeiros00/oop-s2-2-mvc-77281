@@ -39,30 +39,58 @@ jobs:
       run: dotnet build --no-restore --configuration Release
       
     - name: Run tests
-      run: dotnet test --no-build --configuration Release --verbosity normal --collect:"XPlat Code Coverage" --results-directory ./coverage
-      
-    - name: Upload coverage reports to Codecov (Ubuntu only)
+      run: dotnet test --no-build --configuration Release --verbosity normal --collect:"XPlat Code Coverage" --results-directory ./coverage --logger "console;verbosity=detailed"
+
+    - name: List coverage files (Ubuntu only - Debug)
       if: matrix.os == 'ubuntu-latest'
-      uses: codecov/codecov-action@v4
-      with:
-        directory: ./coverage
-        fail_ci_if_error: false
-        token: ${{ secrets.CODECOV_TOKEN }}
-        
+      run: |
+        echo "Coverage directory contents:"
+        find ./coverage -type f -name "*.xml" || echo "No coverage files found"
+        ls -R ./coverage || echo "Coverage directory doesn't exist"
+      continue-on-error: true
+
     - name: Generate coverage report (Ubuntu only)
       if: matrix.os == 'ubuntu-latest'
       run: |
         dotnet tool install -g dotnet-reportgenerator-globaltool
+
+        # Find coverage files
+        COVERAGE_FILES=$(find ./coverage -name "coverage.cobertura.xml" -type f)
+
+        if [ -z "$COVERAGE_FILES" ]; then
+          echo "No coverage files found. Skipping report generation."
+          echo "This usually means:"
+          echo "1. No tests were executed"
+          echo "2. Tests don't have code coverage enabled"
+          echo "3. The coverlet.collector package is missing"
+          exit 0
+        fi
+
+        echo "Found coverage files:"
+        echo "$COVERAGE_FILES"
+
         reportgenerator -reports:"./coverage/**/coverage.cobertura.xml" -targetdir:"./coveragereport" -reporttypes:"Html;TextSummary"
-        cat ./coveragereport/Summary.txt
-        
+
+        if [ -f "./coveragereport/Summary.txt" ]; then
+          cat ./coveragereport/Summary.txt
+        fi
+      continue-on-error: true
+
     - name: Upload coverage artifact
-      if: matrix.os == 'ubuntu-latest'
+      if: matrix.os == 'ubuntu-latest' && hashFiles('./coveragereport/**/*') != ''
       uses: actions/upload-artifact@v4
       with:
         name: coverage-report
         path: ./coveragereport
         retention-days: 7
+
+    - name: Upload coverage reports to Codecov (Ubuntu only)
+      if: matrix.os == 'ubuntu-latest' && hashFiles('./coverage/**/coverage.cobertura.xml') != ''
+      uses: codecov/codecov-action@v4
+      with:
+        directory: ./coverage
+        fail_ci_if_error: false
+        token: ${{ secrets.CODECOV_TOKEN }}
         
   code-quality:
     runs-on: ubuntu-latest
