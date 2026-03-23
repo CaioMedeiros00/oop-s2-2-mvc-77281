@@ -1,0 +1,93 @@
+@model Food.Domain.Models.Premises
+
+@{
+    ViewData["Title"] = "Premises Details";
+}
+
+<h1>Premises Details</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">Name</dt>
+        <dd class="col-sm-9">@Model.Name</dd>
+
+        <dt class="col-sm-3">Address</dt>
+        <dd class="col-sm-9">@Model.Address</dd>
+
+        <dt class="col-sm-3">Town</dt>
+        <dd class="col-sm-9">@Model.Town</dd>
+
+        <dt class="col-sm-3">Risk Rating</dt>
+        <dd class="col-sm-9">
+            @if (Model.RiskRating == Food.Domain.Models.RiskRating.High)
+            {
+                <span class="badge bg-danger">High</span>
+            }
+            else if (Model.RiskRating == Food.Domain.Models.RiskRating.Medium)
+            {
+                <span class="badge bg-warning">Medium</span>
+            }
+            else
+            {
+                <span class="badge bg-success">Low</span>
+            }
+        </dd>
+
+        <dt class="col-sm-3">Total Inspections</dt>
+        <dd class="col-sm-9">@Model.Inspections.Count</dd>
+    </dl>
+</div>
+
+<div>
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+    }
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>
+
+@if (Model.Inspections.Any())
+{
+    <hr />
+    <h3>Inspection History</h3>
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Score</th>
+                <th>Outcome</th>
+                <th>Follow-Ups</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var inspection in Model.Inspections.OrderByDescending(i => i.InspectionDate))
+            {
+                <tr>
+                    <td>@inspection.InspectionDate.ToShortDateString()</td>
+                    <td>@inspection.Score / 100</td>
+                    <td>
+                        @if (inspection.Outcome == Food.Domain.Models.InspectionOutcome.Pass)
+                        {
+                            <span class="badge bg-success">Pass</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">Fail</span>
+                        }
+                    </td>
+                    <td>@inspection.FollowUps.Count</td>
+                    <td>
+                        <a asp-controller="Inspections" asp-action="Details" asp-route-id="@inspection.Id" class="btn btn-sm btn-info">View</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <hr />
+    <p class="text-muted">No inspections recorded for this premises yet.</p>
+}

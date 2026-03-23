@@ -1,0 +1,82 @@
+@model Food.MVC.ViewModels.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h1>Dashboard</h1>
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <form method="get" class="row g-3">
+            <div class="col-md-4">
+                <label for="town" class="form-label">Filter by Town</label>
+                <select name="town" id="town" class="form-control">
+                    <option value="">All Towns</option>
+                    @foreach (var town in Model.AvailableTowns)
+                    {
+                        <option value="@town" selected="@(town == Model.FilterTown)">@town</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="riskRating" class="form-label">Filter by Risk Rating</label>
+                <select name="riskRating" id="riskRating" class="form-control">
+                    <option value="">All Risk Ratings</option>
+                    <option value="@((int)Food.Domain.Models.RiskRating.Low)" selected="@(Model.FilterRiskRating == Food.Domain.Models.RiskRating.Low)">Low</option>
+                    <option value="@((int)Food.Domain.Models.RiskRating.Medium)" selected="@(Model.FilterRiskRating == Food.Domain.Models.RiskRating.Medium)">Medium</option>
+                    <option value="@((int)Food.Domain.Models.RiskRating.High)" selected="@(Model.FilterRiskRating == Food.Domain.Models.RiskRating.High)">High</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">&nbsp;</label>
+                <div>
+                    <button type="submit" class="btn btn-primary">Apply Filters</button>
+                    <a asp-action="Index" class="btn btn-secondary">Clear</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-header">Inspections This Month</div>
+            <div class="card-body">
+                <h5 class="card-title display-4">@Model.InspectionsThisMonth</h5>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-danger mb-3">
+            <div class="card-header">Failed Inspections This Month</div>
+            <div class="card-body">
+                <h5 class="card-title display-4">@Model.FailedInspectionsThisMonth</h5>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-warning mb-3">
+            <div class="card-header">Overdue Follow-Ups</div>
+            <div class="card-body">
+                <h5 class="card-title display-4">@Model.OverdueFollowUps</h5>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(Model.FilterTown) || Model.FilterRiskRating.HasValue)
+{
+    <div class="alert alert-info">
+        <strong>Active Filters:</strong>
+        @if (!string.IsNullOrEmpty(Model.FilterTown))
+        {
+            <span class="badge bg-secondary">Town: @Model.FilterTown</span>
+        }
+        @if (Model.FilterRiskRating.HasValue)
+        {
+            <span class="badge bg-secondary">Risk Rating: @Model.FilterRiskRating</span>
+        }
+    </div>
+}

@@ -1,0 +1,97 @@
+@model Food.Domain.Models.Inspection
+
+@{
+    ViewData["Title"] = "Inspection Details";
+}
+
+<h1>Inspection Details</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">Premises</dt>
+        <dd class="col-sm-9">@Model.Premises?.Name</dd>
+
+        <dt class="col-sm-3">Address</dt>
+        <dd class="col-sm-9">@Model.Premises?.Address, @Model.Premises?.Town</dd>
+
+        <dt class="col-sm-3">Risk Rating</dt>
+        <dd class="col-sm-9">
+            @if (Model.Premises?.RiskRating == Food.Domain.Models.RiskRating.High)
+            {
+                <span class="badge bg-danger">High</span>
+            }
+            else if (Model.Premises?.RiskRating == Food.Domain.Models.RiskRating.Medium)
+            {
+                <span class="badge bg-warning">Medium</span>
+            }
+            else
+            {
+                <span class="badge bg-success">Low</span>
+            }
+        </dd>
+
+        <dt class="col-sm-3">Inspection Date</dt>
+        <dd class="col-sm-9">@Model.InspectionDate.ToShortDateString()</dd>
+
+        <dt class="col-sm-3">Score</dt>
+        <dd class="col-sm-9">@Model.Score / 100</dd>
+
+        <dt class="col-sm-3">Outcome</dt>
+        <dd class="col-sm-9">
+            @if (Model.Outcome == Food.Domain.Models.InspectionOutcome.Pass)
+            {
+                <span class="badge bg-success">Pass</span>
+            }
+            else
+            {
+                <span class="badge bg-danger">Fail</span>
+            }
+        </dd>
+
+        <dt class="col-sm-3">Notes</dt>
+        <dd class="col-sm-9">@Model.Notes</dd>
+    </dl>
+</div>
+
+<div>
+    @if (User.IsInRole("Admin") || User.IsInRole("Inspector"))
+    {
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+    }
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>
+
+@if (Model.FollowUps.Any())
+{
+    <hr />
+    <h3>Follow-Ups</h3>
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th>Due Date</th>
+                <th>Status</th>
+                <th>Closed Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var followUp in Model.FollowUps)
+            {
+                <tr>
+                    <td>@followUp.DueDate.ToShortDateString()</td>
+                    <td>
+                        @if (followUp.Status == Food.Domain.Models.FollowUpStatus.Open)
+                        {
+                            <span class="badge bg-warning">Open</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-success">Closed</span>
+                        }
+                    </td>
+                    <td>@(followUp.ClosedDate?.ToShortDateString() ?? "-")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

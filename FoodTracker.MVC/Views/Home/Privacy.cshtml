@@ -1,0 +1,181 @@
+@{
+    ViewData["Title"] = "Privacy Policy";
+}
+<h1>@ViewData["Title"]</h1>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <p class="lead">Last Updated: @DateTime.Now.ToString("MMMM dd, yyyy")</p>
+
+            <hr />
+
+            <h2>1. Introduction</h2>
+            <p>
+                Welcome to the Food Safety Inspection Tracker. This Privacy Policy explains how we collect, use, 
+                disclose, and safeguard your information when you use our application. Please read this privacy 
+                policy carefully. If you do not agree with the terms of this privacy policy, please do not access 
+                the application.
+            </p>
+
+            <h2>2. Information We Collect</h2>
+            <h3>2.1 Personal Information</h3>
+            <p>We collect the following personal information when you register and use our application:</p>
+            <ul>
+                <li><strong>Account Information:</strong> Email address, username, and password (encrypted)</li>
+                <li><strong>User Role:</strong> Admin, Inspector, or Viewer classification</li>
+                <li><strong>Activity Logs:</strong> Login/logout timestamps, actions performed, and IP addresses</li>
+            </ul>
+
+            <h3>2.2 Inspection Data</h3>
+            <p>We collect and store information related to food safety inspections:</p>
+            <ul>
+                <li>Premises information (name, address, town, risk rating)</li>
+                <li>Inspection records (date, score, outcome, notes)</li>
+                <li>Follow-up information (due dates, status, closure dates)</li>
+            </ul>
+
+            <h3>2.3 Automatically Collected Information</h3>
+            <ul>
+                <li><strong>Log Data:</strong> Application events, errors, and system activities via Serilog</li>
+                <li><strong>Usage Data:</strong> Pages accessed, features used, and session duration</li>
+                <li><strong>Technical Data:</strong> Browser type, device information, and operating system</li>
+            </ul>
+
+            <h2>3. How We Use Your Information</h2>
+            <p>We use the collected information for the following purposes:</p>
+            <ul>
+                <li>To provide, operate, and maintain the Food Safety Inspection Tracker</li>
+                <li>To manage user accounts and authentication</li>
+                <li>To enforce role-based access control (Admin, Inspector, Viewer)</li>
+                <li>To track and maintain inspection records and follow-ups</li>
+                <li>To generate dashboard reports and analytics</li>
+                <li>To maintain an audit trail for regulatory compliance</li>
+                <li>To detect, prevent, and address technical issues and security threats</li>
+                <li>To comply with legal obligations and food safety regulations</li>
+            </ul>
+
+            <h2>4. Data Storage and Security</h2>
+            <h3>4.1 Database</h3>
+            <p>
+                All data is stored in a secure SQLite database with encrypted connections. 
+                Access is restricted to authorized personnel only.
+            </p>
+
+            <h3>4.2 Passwords</h3>
+            <p>
+                User passwords are hashed using ASP.NET Core Identity's secure hashing algorithms. 
+                We never store passwords in plain text.
+            </p>
+
+            <h3>4.3 Logging</h3>
+            <p>
+                Application logs are stored in rotating daily files with restricted access. 
+                Logs include user activities for audit trail purposes but exclude sensitive data 
+                such as passwords.
+            </p>
+
+            <h3>4.4 Security Measures</h3>
+            <ul>
+                <li>HTTPS encryption for all data transmission</li>
+                <li>Role-based access control (RBAC)</li>
+                <li>Anti-forgery tokens to prevent CSRF attacks</li>
+                <li>Input validation to prevent injection attacks</li>
+                <li>Regular security updates and patches</li>
+            </ul>
+
+            <h2>5. Data Sharing and Disclosure</h2>
+            <p>We do not sell, trade, or rent your personal information to third parties. We may share information in the following circumstances:</p>
+            <ul>
+                <li><strong>Legal Requirements:</strong> When required by law, court order, or government authority</li>
+                <li><strong>Health Authorities:</strong> Food safety inspection data may be shared with relevant health authorities</li>
+                <li><strong>Internal Use:</strong> Authorized administrators and inspectors within your organization</li>
+            </ul>
+
+            <h2>6. User Rights</h2>
+            <p>You have the following rights regarding your personal information:</p>
+            <ul>
+                <li><strong>Access:</strong> Request a copy of your personal data</li>
+                <li><strong>Correction:</strong> Request correction of inaccurate data</li>
+                <li><strong>Deletion:</strong> Request deletion of your account (subject to legal retention requirements)</li>
+                <li><strong>Export:</strong> Request export of your data in a portable format</li>
+                <li><strong>Objection:</strong> Object to certain data processing activities</li>
+            </ul>
+            <p>To exercise these rights, please contact your system administrator.</p>
+
+            <h2>7. Data Retention</h2>
+            <p>We retain your information for as long as:</p>
+            <ul>
+                <li>Your account is active</li>
+                <li>Necessary to provide services to you</li>
+                <li>Required by law (food safety records may have specific retention periods)</li>
+                <li>Needed for audit trail and compliance purposes</li>
+            </ul>
+
+            <h2>8. Cookies and Tracking</h2>
+            <p>
+                Our application uses essential cookies for authentication and session management. 
+                These cookies are necessary for the application to function properly and include:
+            </p>
+            <ul>
+                <li><strong>Authentication Cookie:</strong> Maintains your login session</li>
+                <li><strong>Anti-forgery Token:</strong> Protects against CSRF attacks</li>
+            </ul>
+            <p>
+                We do not use tracking cookies or third-party analytics cookies.
+            </p>
+
+            <h2>9. Children's Privacy</h2>
+            <p>
+                This application is not intended for use by children under the age of 18. 
+                We do not knowingly collect personal information from children.
+            </p>
+
+            <h2>10. Changes to This Privacy Policy</h2>
+            <p>
+                We may update this Privacy Policy from time to time. We will notify users of any 
+                material changes by posting the new Privacy Policy on this page and updating the 
+                "Last Updated" date.
+            </p>
+
+            <h2>11. Contact Information</h2>
+            <p>If you have questions or concerns about this Privacy Policy, please contact:</p>
+            <address>
+                <strong>Food Safety Inspection Tracker - System Administrator</strong><br />
+                Email: <a href="mailto:admin@foodsafety.local">admin@foodsafety.local</a><br />
+                <br />
+                <em>For technical issues or security concerns, please contact your IT department.</em>
+            </address>
+
+            <h2>12. Compliance</h2>
+            <p>
+                This application is designed to comply with:
+            </p>
+            <ul>
+                <li>General Data Protection Regulation (GDPR) - for EU users</li>
+                <li>Food Safety regulations and standards</li>
+                <li>Local data protection laws</li>
+            </ul>
+
+            <hr />
+
+            <div class="alert alert-info">
+                <h4>Your Privacy Matters</h4>
+                <p>
+                    We are committed to protecting your privacy and ensuring the security of your data. 
+                    This application uses industry-standard security measures and best practices to 
+                    safeguard your information.
+                </p>
+            </div>
+
+            <div class="mt-4">
+                <a asp-action="Index" class="btn btn-primary">Return to Home</a>
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <a asp-controller="Dashboard" asp-action="Index" class="btn btn-secondary">Go to Dashboard</a>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

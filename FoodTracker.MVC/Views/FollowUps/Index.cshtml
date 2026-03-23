@@ -1,0 +1,61 @@
+@model IEnumerable<Food.Domain.Models.FollowUp>
+
+@{
+    ViewData["Title"] = "Follow-Ups";
+}
+
+<h1>Follow-Ups</h1>
+
+@if (User.IsInRole("Admin") || User.IsInRole("Inspector"))
+{
+    <p>
+        <a asp-action="Create" class="btn btn-primary">Create New Follow-Up</a>
+    </p>
+}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Premises</th>
+            <th>Inspection Date</th>
+            <th>Due Date</th>
+            <th>Status</th>
+            <th>Closed Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            var isOverdue = item.Status == Food.Domain.Models.FollowUpStatus.Open && item.DueDate < DateTime.Now;
+            <tr class="@(isOverdue ? "table-danger" : "")">
+                <td>@item.Inspection?.Premises?.Name</td>
+                <td>@item.Inspection?.InspectionDate.ToShortDateString()</td>
+                <td>
+                    @item.DueDate.ToShortDateString()
+                    @if (isOverdue)
+                    {
+                        <span class="badge bg-danger">OVERDUE</span>
+                    }
+                </td>
+                <td>
+                    @if (item.Status == Food.Domain.Models.FollowUpStatus.Open)
+                    {
+                        <span class="badge bg-warning">Open</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success">Closed</span>
+                    }
+                </td>
+                <td>@(item.ClosedDate?.ToShortDateString() ?? "-")</td>
+                <td>
+                    @if (User.IsInRole("Admin") || User.IsInRole("Inspector"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

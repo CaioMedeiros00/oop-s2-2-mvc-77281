@@ -1,0 +1,31 @@
+@model Food.Domain.Models.Inspection
+
+@{
+    ViewData["Title"] = "Delete Inspection";
+}
+
+<h1>Delete Inspection</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">Premises</dt>
+        <dd class="col-sm-9">@Model.Premises?.Name</dd>
+
+        <dt class="col-sm-3">Inspection Date</dt>
+        <dd class="col-sm-9">@Model.InspectionDate.ToShortDateString()</dd>
+
+        <dt class="col-sm-3">Score</dt>
+        <dd class="col-sm-9">@Model.Score</dd>
+
+        <dt class="col-sm-3">Outcome</dt>
+        <dd class="col-sm-9">@Model.Outcome</dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </form>
+</div>

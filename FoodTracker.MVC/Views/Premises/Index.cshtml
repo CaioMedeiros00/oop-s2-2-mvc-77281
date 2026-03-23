@@ -1,0 +1,60 @@
+@model IEnumerable<Food.Domain.Models.Premises>
+
+@{
+    ViewData["Title"] = "Premises";
+}
+
+<h1>Food Premises</h1>
+
+@if (User.IsInRole("Admin"))
+{
+    <p>
+        <a asp-action="Create" class="btn btn-primary">Create New Premises</a>
+    </p>
+}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Town</th>
+            <th>Risk Rating</th>
+            <th>Inspections</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Address</td>
+                <td>@item.Town</td>
+                <td>
+                    @if (item.RiskRating == Food.Domain.Models.RiskRating.High)
+                    {
+                        <span class="badge bg-danger">High</span>
+                    }
+                    else if (item.RiskRating == Food.Domain.Models.RiskRating.Medium)
+                    {
+                        <span class="badge bg-warning">Medium</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success">Low</span>
+                    }
+                </td>
+                <td>@item.Inspections.Count</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Details</a>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

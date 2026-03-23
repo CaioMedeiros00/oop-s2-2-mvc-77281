@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="FoodTracker.Domain/FoodTracker.Domain.csproj" />
+  <Project Path="FoodTracker.MVC/FoodTracker.MVC.csproj" />
+  <Project Path="FoodTracker.Tests/FoodTracker.Tests.csproj" />
+</Solution>
