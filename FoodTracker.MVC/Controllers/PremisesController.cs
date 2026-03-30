@@ -18,15 +18,31 @@ public class PremisesController : Controller
         _logger = logger;
     }
 
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string searchString)
     {
-        var premises = await _context.Premises
+        ViewData["CurrentFilter"] = searchString;
+
+        var premises = _context.Premises
             .Include(p => p.Inspections)
+            .AsQueryable();
+
+        if (!string.IsNullOrEmpty(searchString))
+        {
+            premises = premises.Where(p => 
+                p.Name.Contains(searchString) || 
+                p.Address.Contains(searchString) || 
+                p.Town.Contains(searchString));
+
+            _logger.LogInformation("Premises search performed by user: {UserName}, SearchTerm: {SearchString}", 
+                User.Identity?.Name, searchString);
+        }
+
+        var premisesList = await premises
             .OrderBy(p => p.Name)
             .ToListAsync();
-        
+
         _logger.LogInformation("Premises list viewed by user: {UserName}", User.Identity?.Name);
-        return View(premises);
+        return View(premisesList);
     }
 
     public async Task<IActionResult> Details(int? id)

@@ -172,6 +172,53 @@ public class FollowUpsController : Controller
         return View(followUp);
     }
 
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> Delete(int? id)
+    {
+        if (id == null)
+        {
+            return NotFound();
+        }
+
+        var followUp = await _context.FollowUps
+            .Include(f => f.Inspection)
+            .ThenInclude(i => i!.Premises)
+            .FirstOrDefaultAsync(m => m.Id == id);
+
+        if (followUp == null)
+        {
+            _logger.LogWarning("Follow-up not found for delete: ID={FollowUpId}", id);
+            return NotFound();
+        }
+
+        return View(followUp);
+    }
+
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        try
+        {
+            var followUp = await _context.FollowUps.FindAsync(id);
+            if (followUp != null)
+            {
+                _context.FollowUps.Remove(followUp);
+                await _context.SaveChangesAsync();
+
+                _logger.LogInformation("Follow-up deleted: ID={FollowUpId}, User={UserName}", 
+                    id, User.Identity?.Name);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error deleting follow-up: ID={FollowUpId}", id);
+        }
+
+        return RedirectToAction(nameof(Index));
+    }
+
     private bool FollowUpExists(int id)
     {
         return _context.FollowUps.Any(e => e.Id == id);
